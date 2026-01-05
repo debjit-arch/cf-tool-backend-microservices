@@ -45,6 +45,9 @@ public class ApiGatewayConfiguration {
             .route("email-service", r -> r.path("/email-service/**")
                     .filters(f -> f.stripPrefix(1))
                     .uri("lb://EMAIL-SERVICE"))
+            .route("demo-service", r -> r.path("/demo-service/**")
+                    .filters(f -> f.stripPrefix(1))
+                    .uri("lb://DEMO-SERVICE"))
 
             .build();
     }

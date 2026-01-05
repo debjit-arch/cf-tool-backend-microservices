@@ -16,33 +16,32 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 @Configuration
 public class SecurityConfig {
 
-    @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-        http
-            .csrf(csrf -> csrf.disable())
-            .authorizeExchange(ex -> ex
-                .pathMatchers(HttpMethod.OPTIONS).permitAll() // preflight
-                .anyExchange().permitAll()
-            )
-            .headers(headers -> headers
-	                .frameOptions(frame -> frame.disable())
-	                )
-            .cors(); // enable CORS
+	@Bean
+	public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+		http.csrf(csrf -> csrf.disable()).authorizeExchange(ex -> ex.pathMatchers(HttpMethod.OPTIONS).permitAll() // preflight
+				.anyExchange().permitAll()).headers(headers -> headers.frameOptions(frame -> frame.disable())).cors(); // enable
+																														// CORS
 
-        return http.build();
-    }
+		return http.build();
+	}
 
-    // This CORS filter ensures headers are added before security
-    @Bean
-    public CorsWebFilter corsWebFilter() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("https://tool.consultantsfactory.com","https://microservices.d1iwz64jvqpior.amplifyapp.com","https://main.d2y8kazdz4iqhv.amplifyapp.com","https://test-2.d2y8kazdz4iqhv.amplifyapp.com","http://localhost:3000"));
-        config.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS","PATCH"));
-        config.setAllowedHeaders(Arrays.asList("*"));
-        config.setAllowCredentials(true);
+	// This CORS filter ensures headers are added before security
+	@Bean
+	public CorsWebFilter corsWebFilter() {
+		CorsConfiguration config = new CorsConfiguration();
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return new CorsWebFilter(source);
-    }
+		config.setAllowedOriginPatterns(Arrays.asList("https://*.calvant.com", "https://calvant.com",
+				"https://www.calvant.com", "http://localhost:3000","https://pre-prod.d1iwz64jvqpior.amplifyapp.com"));
+
+		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+
+		config.setAllowedHeaders(Arrays.asList("*"));
+		config.setAllowCredentials(true);
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", config);
+
+		return new CorsWebFilter(source);
+	}
+
 }
