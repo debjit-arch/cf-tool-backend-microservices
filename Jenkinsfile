@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SERVICE_NAME = "demo-service"
+        SERVICE_NAME = "demo-service"              // docker-compose service name
         IMAGE_NAME   = "tkos007/demo-service"
         IMAGE_TAG    = "latest"
         COMPOSE_DIR  = "/home/ubuntu"
@@ -12,25 +12,22 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git(
-                    url: 'https://github.com/debjit-arch/cf-tool-backend-microservices.git',
-                    branch: 'main',
-                    credentialsId: 'github-creds'
-                )
+                git url: 'https://github.com/debjit-arch/cf-tool-backend-microservices.git',
+                    branch: 'main'
             }
         }
 
-        stage('Build JAR (demo-service)') {
+        stage('Build JAR - demo-request') {
             steps {
-                dir('demo-service') {
+                dir('demo-request') {
                     sh 'mvn clean package -DskipTests'
                 }
             }
         }
 
-        stage('Build Docker Image (demo-service)') {
+        stage('Build Docker Image - demo-request') {
             steps {
-                dir('demo-service') {
+                dir('demo-request') {
                     sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
                 }
             }
