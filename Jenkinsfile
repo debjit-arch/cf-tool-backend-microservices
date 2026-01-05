@@ -1,15 +1,18 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'SERVICE', defaultValue: 'demo-request', description: 'Microservice to build and deploy')
+    }
+
     environment {
-        SERVICE_NAME = "demo-service"              // docker-compose service name
-        IMAGE_NAME   = "tkos007/demo-service"
-        IMAGE_TAG    = "latest"
         COMPOSE_DIR  = "/home/ubuntu"
+        IMAGE_TAG    = "latest"
+        DOCKER_USER  = ''  // Will be set via credentials binding
+        DOCKER_PASS  = ''  // Will be set via credentials binding
     }
 
     stages {
-
         stage('Checkout Code') {
             steps {
                 git url: 'https://github.com/debjit-arch/cf-tool-backend-microservices.git',
@@ -17,18 +20,21 @@ pipeline {
             }
         }
 
-        stage('Build JAR - demo-request') {
+        stage('Build JAR') {
             steps {
-                dir('demo-request') {
+                dir("${params.SERVICE}") {
                     sh 'mvn clean package -DskipTests'
                 }
             }
         }
 
-        stage('Build Docker Image - demo-request') {
+        stage('Build Docker Image') {
             steps {
-                dir('demo-request') {
-                    sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
+                dir("${params.SERVICE}") {
+                    script {
+                        def imageName = "tkos007/${params.SERVICE}"
+                        sh "docker build -t ${imageName}:${IMAGE_TAG} ."
+                    }
                 }
             }
         }
@@ -40,20 +46,23 @@ pipeline {
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    sh '''
-                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                        docker push $IMAGE_NAME:$IMAGE_TAG
-                    '''
+                    script {
+                        def imageName = "tkos007/${params.SERVICE}"
+                        sh '''
+                            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                            docker push ${imageName}:${IMAGE_TAG}
+                        '''
+                    }
                 }
             }
         }
 
-        stage('Deploy demo-service using docker-compose') {
+        stage('Deploy using docker-compose') {
             steps {
                 sh '''
-                    cd $COMPOSE_DIR
-                    docker compose pull $SERVICE_NAME
-                    docker compose up -d --scale $SERVICE_NAME=2 $SERVICE_NAME
+                    cd ${COMPOSE_DIR}
+                    docker compose pull ${params.SERVICE}
+                    docker compose up -d --scale ${params.SERVICE}=2 ${params.SERVICE}
                 '''
             }
         }
