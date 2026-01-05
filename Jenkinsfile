@@ -52,8 +52,8 @@ pipeline {
             steps {
                 sh '''
                     cd $COMPOSE_DIR
-                    docker-compose pull $SERVICE_NAME
-                    docker-compose up -d $SERVICE_NAME
+                    docker compose pull $SERVICE_NAME
+                    docker compose up -d $SERVICE_NAME
                 '''
             }
         }
