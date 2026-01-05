@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        SERVICE_NAME = "demo-request"
-        IMAGE_NAME   = "tkos007/demo-request"
+        SERVICE_NAME = "demo-service"
+        IMAGE_NAME   = "tkos007/demo-service"
         IMAGE_TAG    = "latest"
         COMPOSE_DIR  = "/home/ubuntu"
     }
