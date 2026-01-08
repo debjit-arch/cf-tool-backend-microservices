@@ -31,7 +31,8 @@ public class SecurityConfig {
 		CorsConfiguration config = new CorsConfiguration();
 
 		config.setAllowedOriginPatterns(Arrays.asList("https://*.calvant.com", "https://calvant.com",
-				"https://www.calvant.com", "http://localhost:3000","https://pre-prod.d1iwz64jvqpior.amplifyapp.com"));
+				"https://www.calvant.com", "http://localhost:3000", "https://pre-prod.d1iwz64jvqpior.amplifyapp.com",
+				"https://tool.consultantsfactory.com"));
 
 		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
 
