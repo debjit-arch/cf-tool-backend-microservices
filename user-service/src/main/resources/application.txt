@@ -1,0 +1,8 @@
+spring.application.name=user-service
+server.port=4000
+spring.data.mongodb.uri=mongodb+srv://debjit:katana007@cluster0.kd9pbws.mongodb.net/test?retryWrites=true&w=majority&appName=Cluster0
+spring.security.user.name=username
+spring.security.user.password=password
+jwt.secret=hbDGxyixY2wvTjNVUcxjIX/hyRasXYo/b0HrXm8GdinvtWQrq0/0NGO+acdzfNyrw5DccbNQHy0S0TKGWNjHWQ==
+jwt.expiration-ms=3600000
+eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka

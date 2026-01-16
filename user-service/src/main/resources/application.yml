@@ -1,0 +1,30 @@
+server:
+  port: 4000
+
+spring:
+  application:
+    name: user-service
+  # Disable default auto-config since we have 3 databases  autoconfigure:
+  #  exclude: org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+
+  data:
+    mongodb:
+      in:
+        uri: mongodb://cftoolind:katana007@docdb-ind.cluster-cyarnzzhddsw.ap-south-1.docdb.amazonaws.com:27017/admin?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false
+      eu:
+        uri: mongodb://cftooladmin:katana007@docdb-eu.cluster-cjfxrwqdm1rm.eu-central-1.docdb.amazonaws.com:27017/admin?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false
+      us:
+        uri: mongodb://cftooladmin:katana007@docdb-us.cluster-cmuqitnitx1o.us-east-1.docdb.amazonaws.com:27017/admin?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false
+  security:
+    user:
+      name: username
+      password: password
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+jwt:
+  secret: hbDGxyixY2wvTjNVUcxjIX/hyRasXYo/b0HrXm8GdinvtWQrq0/0NGO+acdzfNyrw5DccbNQHy0S0TKGWNjHWQ==
+  expiration-ms: 3600000
